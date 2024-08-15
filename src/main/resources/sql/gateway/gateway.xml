@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.nextcore.taglocationandgwcollector.gateway.GatewayMapper">
+    <select id="selectDkeyList" resultType="java.lang.String">
+        SELECT DKEY FROM NC_P_GATEWAY_T
+    </select>
+
+    <update id="updateCurrGatewayData" parameterType="java.util.List">
+        <foreach collection="list" item="gData" open="" separator=";" close="">
+            UPDATE NC_P_GATEWAY_T
+            SET
+                GW_BATT = #{gData.GW_BATT},
+                REGDATE = #{gData.REGDATE},
+                GW_PRESSURE_BASE_CHECK = #{gData.GW_PRESSURE_BASE_CHECK}
+            WHERE 1=1
+                AND DKEY = #{gData.DKEY}
+        </foreach>
+    </update>
+
+
+    <insert id="insertGatewayDataHistory" parameterType="java.util.List">
+        INSERT INTO NC_P_GATEWAY_HIS_T(DKEY, GW_TYPE, GW_BATT, GW_LOCATION, GW_PRESSURE_BASE_CHECK, REGDATE, NAME) VALUES
+        <foreach collection="list" item="gData" separator=",">
+            (#{gData.DKEY},#{gData.GW_TYPE},#{gData.GW_BATT},#{gData.GW_LOCATION},#{gData.GW_PRESSURE_BASE_CHECK},#{gData.REGDATE},#{gData.NAME})
+        </foreach>
+    </insert>
+
+    <delete id="deleteCurrGatewayData">
+        DELETE FROM NC_P_GATEWAY_T
+    </delete>
+
+    <insert id="insertCurrGatewayData" parameterType="java.util.List">
+        INSERT INTO NC_P_GATEWAY_T(DKEY, GW_TYPE, GW_BATT, GW_LOCATION, GW_PRESSURE_BASE_CHECK, REGDATE, NAME) VALUES
+        <foreach collection="list" item="gData" separator=",">
+            (#{gData.DKEY},#{gData.GW_TYPE},#{gData.GW_BATT},#{gData.GW_LOCATION},#{gData.GW_PRESSURE_BASE_CHECK},#{gData.REGDATE},#{gData.NAME})
+        </foreach>
+
+    </insert>
+
+
+
+
+
+
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.nextcore.taglocationandgwcollector.common.DBManageMapper">
+
+    <delete id="deleteLocationHisDataBeforeOneMonth" parameterType="java.lang.String">
+        DELETE FROM NC_P_LOCATION_HIS_T
+        WHERE 1=1
+        AND REGDATE &lt; #{beforeOneMonth}
+    </delete>
+
+    <delete id="deleteGWHisDataBeforeOneMonth">
+        DELETE FROM NC_P_GATEWAY_HIS_T
+        WHERE 1=1
+        AND REGDATE &lt; #{beforeOneMonth}
+
+    </delete>
+
+</mapper>

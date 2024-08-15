@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.nextcore.taglocationandgwcollector.location.LocationMapper">
+    <select id="selectDkeyList" resultType="java.lang.String">
+        SELECT DKEY FROM NC_P_LOCATION_T;
+    </select>
+
+    <insert id="insertLocationDataHistory" parameterType="java.util.List">
+        INSERT INTO NC_P_LOCATION_HIS_T (DKEY, REGDATE, BUILDING_ID, BATT, X, Y, Z, TEMP) VALUES
+        <foreach collection="list" item="locationData" separator=",">
+            (#{locationData.DKEY}, #{locationData.REGDATE}, #{locationData.BUILDING_ID}, ${locationData.BATT}, ${locationData.X}, ${locationData.Y}, ${locationData.Z}, NULL)
+        </foreach>
+    </insert>
+
+    <update id="updateCurrLocationData" parameterType="java.util.List">
+        <foreach collection="list" item="locationData" open="" separator=";" close="">
+            UPDATE NC_P_LOCATION_T
+            SET
+                REGDATE = #{locationData.REGDATE},
+                BUILDING_ID = #{locationData.BUILDING_ID},
+                BATT = #{locationData.BATT}
+            WHERE 1=1
+                AND DKEY = #{locationData.DKEY}
+        </foreach>
+    </update>
+
+
+    <delete id="deleteCurrLocationData">
+        DELETE FROM NC_P_LOCATION_T
+    </delete>
+
+    <insert id="insertCurrLocationData" parameterType="java.util.List">
+        INSERT INTO NC_P_LOCATION_T (DKEY, REGDATE, BUILDING_ID, BATT, X, Y, Z, TEMP, NAME) VALUES
+        <foreach collection="list" item="locationData" separator=",">
+            (#{locationData.DKEY}, #{locationData.REGDATE}, #{locationData.BUILDING_ID}, ${locationData.BATT}, ${locationData.X}, ${locationData.Y}, ${locationData.Z}, NULL, #{locationData.NAME})
+        </foreach>
+    </insert>
+
+    <select id="hasOccuredLastOneMinute" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT COUNT(*)
+        FROM NC_F_EVENT_LIST_T
+        WHERE 1=1
+        AND DKEY = #{locationData.DKEY}
+        AND OCDATE BETWEEN DATE_SUB(NOW(), INTERVAL 1 MINUTE) AND NOW()
+    </select>
+
+    <insert id="insertEventList" parameterType="java.util.Map">
+        INSERT INTO NC_F_EVENT_LIST_T(BOX_IDX, BOX_NAME, DKEY, NAME, X, Y, Z, WNUM, OCDATE)
+        VALUES (#{BOX_IDX}, #{BOX_NAME}, #{DKEY}, #{NAME}, #{X}, #{Y}, #{Z}, NULL, DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'))
+    </insert>
+
+    <select id="selectCriticalAreaList" resultType="java.util.Map">
+        SELECT * FROM NC_B_CRITICAL_T
+    </select>
+
+</mapper>
