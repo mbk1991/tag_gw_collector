@@ -17,4 +17,5 @@
 </ul>
 
 # Description
-<img width="596" alt="스크린샷 2024-08-15 18 25 39" src="https://github.com/user-attachments/assets/1474f5c3-4c4b-49a5-8d25-c213dd993355">
+<img width="596" alt="스크린샷 2024-08-15 18 25 39" src="https://github.com/user-attachments/assets/4a585ce5-f662-4c9e-b7fa-0276078074ff">
+
